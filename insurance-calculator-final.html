@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính phí bảo hiểm sức khỏe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .person-card {
+            background: #f8f9ff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .person-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .person-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .person-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="date"],
+        select {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .gender-select {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .gender-option {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 16px;
+        }
+
+        .gender-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .gender-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover:not(.disabled) {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .checkbox-item.checked {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .checkbox-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f5f5f5;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item.disabled input[type="checkbox"] {
+            cursor: not-allowed;
+        }
+
+        .add-person-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #667eea;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .add-person-btn:hover {
+            background: #f8f9ff;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-container {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .result-total {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .result-breakdown {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .breakdown-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .breakdown-item:not(:last-child) {
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .breakdown-label {
+            flex: 1;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .result-amount {
+                font-size: 36px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tính phí bảo hiểm sức khỏe</h1>
+        <p class="subtitle">Nhập thông tin để tính toán phí bảo hiểm chính xác</p>
+
+        <form id="insuranceForm">
+            <div id="personsContainer"></div>
+
+            <button type="button" class="add-person-btn" onclick="addPerson()">
+                ➕ Thêm người được bảo hiểm
+            </button>
+
+            <button type="submit" class="calculate-btn">Tính phí bảo hiểm</button>
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <div class="result-total">Tổng phí bảo hiểm hàng năm</div>
+                <div class="result-amount" id="totalAmount">VND 0</div>
+            </div>
+            <div id="breakdownContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Premium rate table from CSV
+        const PREMIUM_RATES = [{"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 1, "package1": "963,000", "package2": "1,445,000", "package3": "3,449,000", "package4": "5,849,000", "package5": "7,354,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 2, "package1": "963,000", "package2": "1,445,000", "package3": "3,449,000", "package4": "5,849,000", "package5": "7,354,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 3, "package1": "963,000", "package2": "1,445,000", "package3": "3,449,000", "package4": "5,849,000", "package5": "7,354,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 1, "package1": "1,251,900", "package2": "1,878,500", "package3": "4,483,700", "package4": "7,603,700", "package5": "9,560,200"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 2, "package1": "1,251,900", "package2": "1,878,500", "package3": "4,483,700", "package4": "7,603,700", "package5": "9,560,200"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 3, "package1": "1,251,900", "package2": "1,878,500", "package3": "4,483,700", "package4": "7,603,700", "package5": "9,560,200"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 4, "package1": "555,000", "package2": "833,000", "package3": "1,987,000", "package4": "3,370,000", "package5": "4,237,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 5, "package1": "555,000", "package2": "833,000", "package3": "1,987,000", "package4": "3,370,000", "package5": "4,237,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 6, "package1": "555,000", "package2": "833,000", "package3": "1,987,000", "package4": "3,370,000", "package5": "4,237,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 4, "package1": "721,500", "package2": "1,082,900", "package3": "2,583,100", "package4": "4,381,000", "package5": "5,508,100"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 5, "package1": "721,500", "package2": "1,082,900", "package3": "2,583,100", "package4": "4,381,000", "package5": "5,508,100"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 6, "package1": "721,500", "package2": "1,082,900", "package3": "2,583,100", "package4": "4,381,000", "package5": "5,508,100"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 7, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 8, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 9, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 10, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 11, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 12, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 13, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 14, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 15, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 16, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 17, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 18, "package1": "482,000", "package2": "722,000", "package3": "1,725,000", "package4": "2,924,000", "package5": "3,677,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 19, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 20, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 21, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 22, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 23, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 24, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 25, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 26, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 27, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 28, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 29, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 30, "package1": "459,000", "package2": "688,000", "package3": "1,643,000", "package4": "2,785,000", "package5": "3,502,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 31, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 32, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 33, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 34, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 35, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 36, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 37, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 38, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 39, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 40, "package1": "505,000", "package2": "757,000", "package3": "1,807,000", "package4": "3,064,000", "package5": "3,852,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 41, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 42, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 43, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 44, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 45, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 46, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 47, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 48, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 49, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 50, "package1": "528,000", "package2": "791,000", "package3": "1,889,000", "package4": "3,203,000", "package5": "4,027,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 51, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 52, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 53, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 54, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 55, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 56, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 57, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 58, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 59, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 60, "package1": "550,000", "package2": "826,000", "package3": "1,971,000", "package4": "3,342,000", "package5": "4,202,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 61, "package1": "734,000", "package2": "1,101,000", "package3": "2,628,000", "package4": "4,456,000", "package5": "5,603,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 62, "package1": "734,000", "package2": "1,101,000", "package3": "2,628,000", "package4": "4,456,000", "package5": "5,603,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 63, "package1": "734,000", "package2": "1,101,000", "package3": "2,628,000", "package4": "4,456,000", "package5": "5,603,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 64, "package1": "734,000", "package2": "1,101,000", "package3": "2,628,000", "package4": "4,456,000", "package5": "5,603,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Quyền lợi chính + ngoại trú", "age": 65, "package1": "734,000", "package2": "1,101,000", "package3": "2,628,000", "package4": "4,456,000", "package5": "5,603,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 1, "package1": "30,000", "package2": "30,000", "package3": "78,000", "package4": "78,000", "package5": "150,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 2, "package1": "30,000", "package2": "30,000", "package3": "78,000", "package4": "78,000", "package5": "150,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 3, "package1": "30,000", "package2": "30,000", "package3": "78,000", "package4": "78,000", "package5": "150,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 1, "package1": "39,000", "package2": "39,000", "package3": "101,400", "package4": "101,400", "package5": "195,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 2, "package1": "39,000", "package2": "39,000", "package3": "101,400", "package4": "101,400", "package5": "195,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "1 - 3 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 3, "package1": "39,000", "package2": "39,000", "package3": "101,400", "package4": "101,400", "package5": "195,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 4, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 5, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Mua kèm", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 6, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 4, "package1": "27,300", "package2": "27,300", "package3": "67,600", "package4": "67,600", "package5": "136,500"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 5, "package1": "27,300", "package2": "27,300", "package3": "67,600", "package4": "67,600", "package5": "136,500"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "4 - 6 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 6, "package1": "27,300", "package2": "27,300", "package3": "67,600", "package4": "67,600", "package5": "136,500"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 7, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 8, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "7 - 9 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 9, "package1": "21,000", "package2": "21,000", "package3": "52,000", "package4": "52,000", "package5": "105,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 10, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 11, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 12, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 13, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 14, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 15, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 16, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 17, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "10 - 18 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 18, "package1": "27,000", "package2": "27,000", "package3": "70,000", "package4": "70,000", "package5": "135,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 19, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 20, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 21, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 22, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 23, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 24, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 25, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 26, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 27, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 28, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 29, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 30, "package1": "35,000", "package2": "35,000", "package3": "86,000", "package4": "86,000", "package5": "171,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 31, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 32, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 33, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 34, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 35, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 36, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 37, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 38, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 39, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 40, "package1": "125,000", "package2": "125,000", "package3": "322,000", "package4": "322,000", "package5": "640,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 41, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 42, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 43, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 44, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 45, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 46, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 47, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 48, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 49, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 50, "package1": "370,000", "package2": "370,000", "package3": "925,000", "package4": "925,000", "package5": "1,850,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 51, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 52, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 53, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 54, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 55, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 56, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 57, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 58, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 59, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "51 - 60 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 60, "package1": "800,000", "package2": "800,000", "package3": "2,015,000", "package4": "2,015,000", "package5": "4,029,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 61, "package1": "1,770,000", "package2": "1,770,000", "package3": "4,425,000", "package4": "4,425,000", "package5": "8,800,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 62, "package1": "1,770,000", "package2": "1,770,000", "package3": "4,425,000", "package4": "4,425,000", "package5": "8,800,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 63, "package1": "1,770,000", "package2": "1,770,000", "package3": "4,425,000", "package4": "4,425,000", "package5": "8,800,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 64, "package1": "1,770,000", "package2": "1,770,000", "package3": "4,425,000", "package4": "4,425,000", "package5": "8,800,000"}, {"gender": "Nam/ Nữ", "type": "Độc lập", "ageBand": "61 - 65 tuổi", "benefit": "Bệnh hiểm nghèo", "age": 65, "package1": "1,770,000", "package2": "1,770,000", "package3": "4,425,000", "package4": "4,425,000", "package5": "8,800,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 19, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 20, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 21, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 22, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 23, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 24, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 25, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 26, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 27, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 28, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 29, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "19 - 30 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 30, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 31, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 32, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 33, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 34, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 35, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 36, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 37, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 38, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 39, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "31 - 40 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 40, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 41, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 42, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 43, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 44, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 45, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 46, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 47, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 48, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 49, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}, {"gender": "Nữ", "type": "Độc lập", "ageBand": "41 - 50 tuổi", "benefit": "Chăm sóc Thai sản\nChỉ áp dụng cho Nữ", "age": 50, "package1": "Không áp dụng", "package2": "Không áp dụng", "package3": "2,000,000", "package4": "2,000,000", "package5": "2,000,000"}];
+
+        let personCount = 0;
+
+        // Initialize with one person
+        window.onload = function() {
+            addPerson();
+        };
+
+        function addPerson() {
+            personCount++;
+            const container = document.getElementById('personsContainer');
+            
+            const personCard = document.createElement('div');
+            personCard.className = 'person-card';
+            personCard.id = `person-${personCount}`;
+            personCard.dataset.personId = personCount;
+            
+            personCard.innerHTML = `
+                <div class="person-header">
+                    <div>
+                        <span class="person-title">Người được bảo hiểm ${personCount}</span>
+                        <span class="person-badge" id="badge-${personCount}">Độc lập</span>
+                    </div>
+                    ${personCount > 1 ? `<button type="button" class="remove-btn" onclick="removePerson(${personCount})">Xóa</button>` : ''}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ngày sinh <span style="color: red;">*</span></label>
+                        <input type="date" name="dob-${personCount}" required max="${getTodayDate()}" onchange="updatePersonInfo(${personCount})">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Giới tính <span style="color: red;">*</span></label>
+                        <div class="gender-select">
+                            <div class="gender-option" onclick="selectGender(${personCount}, 'male')">
+                                👨 Nam
+                            </div>
+                            <div class="gender-option" onclick="selectGender(${personCount}, 'female')">
+                                👩 Nữ
+                            </div>
+                        </div>
+                        <input type="hidden" name="gender-${personCount}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chương trình bảo hiểm <span style="color: red;">*</span></label>
+                        <select name="package-${personCount}" required onchange="updateMaternityAvailability(${personCount})">
+                            <option value="">Chọn chương trình</option>
+                            <option value="1">Lựa chọn 1</option>
+                            <option value="2">Lựa chọn 2</option>
+                            <option value="3">Lựa chọn 3</option>
+                            <option value="4">Lựa chọn 4</option>
+                            <option value="5">Lựa chọn 5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quyền lợi bổ sung</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="criticalIllness-${personCount}" onchange="toggleCheckbox(this)">
+                            <span>Bệnh hiểm nghèo</span>
+                        </label>
+                        <label class="checkbox-item disabled" id="maternity-item-${personCount}">
+                            <input type="checkbox" name="maternity-${personCount}" onchange="toggleCheckbox(this)" disabled>
+                            <span>Thai sản (Chỉ áp dụng cho nữ 19-50 tuổi, Lựa chọn 3-5)</span>
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(personCard);
+            updateAllPersonBadges();
+        }
+
+        function removePerson(id) {
+            const person = document.getElementById(`person-${id}`);
+            if (person) {
+                person.remove();
+                updateAllPersonBadges();
+            }
+        }
+
+        function updateAllPersonBadges() {
+            const cards = document.querySelectorAll('.person-card');
+            const totalPeople = cards.length;
+            
+            // FIXED LOGIC: 1 person = Độc lập, 2+ people = ALL Mua kèm
+            cards.forEach((card, index) => {
+                const badge = card.querySelector('.person-badge');
+                const title = card.querySelector('.person-title');
+                title.textContent = `Người được bảo hiểm ${index + 1}`;
+                
+                if (totalPeople === 1) {
+                    badge.textContent = 'Độc lập';
+                } else {
+                    badge.textContent = 'Mua kèm';
+                }
+            });
+        }
+
+        function selectGender(personId, gender) {
+            const card = document.querySelector(`#person-${personId}`);
+            const options = card.querySelectorAll('.gender-option');
+            const input = card.querySelector(`input[name="gender-${personId}"]`);
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.gender-option').classList.add('selected');
+            input.value = gender;
+            
+            updateMaternityAvailability(personId);
+        }
+
+        function updatePersonInfo(personId) {
+            updateMaternityAvailability(personId);
+        }
+
+        function updateMaternityAvailability(personId) {
+            const card = document.querySelector(`#person-${personId}`);
+            if (!card) return;
+            
+            const dobInput = card.querySelector(`input[name="dob-${personId}"]`);
+            const genderInput = card.querySelector(`input[name="gender-${personId}"]`);
+            const packageSelect = card.querySelector(`select[name="package-${personId}"]`);
+            const maternityItem = card.querySelector(`#maternity-item-${personId}`);
+            const maternityCheckbox = card.querySelector(`input[name="maternity-${personId}"]`);
+            
+            const dob = dobInput.value;
+            const gender = genderInput.value;
+            const packageNum = parseInt(packageSelect.value);
+            
+            let isEligible = false;
+            
+            if (gender === 'female' && dob && packageNum >= 3) {
+                const age = calculateAge(dob);
+                if (age >= 19 && age <= 50) {
+                    isEligible = true;
+                }
+            }
+            
+            if (isEligible) {
+                maternityItem.classList.remove('disabled');
+                maternityCheckbox.disabled = false;
+            } else {
+                maternityItem.classList.add('disabled');
+                maternityCheckbox.disabled = true;
+                maternityCheckbox.checked = false;
+                maternityItem.classList.remove('checked');
+            }
+        }
+
+        function toggleCheckbox(checkbox) {
+            const label = checkbox.closest('.checkbox-item');
+            if (checkbox.checked) {
+                label.classList.add('checked');
+            } else {
+                label.classList.remove('checked');
+            }
+        }
+
+        function getTodayDate() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function calculateAge(dob) {
+            const today = new Date();
+            const birthDate = new Date(dob);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+
+        function parseVND(vndString) {
+            if (!vndString || vndString === 'Không áp dụng') return 0;
+            return parseInt(vndString.replace(/,/g, ''));
+        }
+
+        function findRate(age, benefit, isIndependent, packageNum) {
+            const type = isIndependent ? 'Độc lập' : 'Mua kèm';
+            
+            for (const rate of PREMIUM_RATES) {
+                if (rate.age === age && 
+                    rate.benefit === benefit && 
+                    rate.type === type) {
+                    return parseVND(rate[`package${packageNum}`]);
+                }
+            }
+            
+            console.error(`Rate not found: age=${age}, benefit=${benefit}, type=${type}, package=${packageNum}`);
+            return 0;
+        }
+
+        function calculatePersonPremium(personData, totalPeople) {
+            const age = calculateAge(personData.dob);
+            // FIXED LOGIC: 1 person = Độc lập, 2+ people = ALL Mua kèm
+            const isIndependent = totalPeople === 1;
+            const packageNum = parseInt(personData.package);
+            
+            // Main benefit + Outpatient (mandatory)
+            let mainPremium = findRate(age, 'Quyền lợi chính + ngoại trú', isIndependent, packageNum);
+            
+            // Critical illness (optional)
+            let criticalIllnessPremium = 0;
+            if (personData.criticalIllness) {
+                criticalIllnessPremium = findRate(age, 'Bệnh hiểm nghèo', isIndependent, packageNum);
+            }
+            
+            // Maternity (optional, female only, age 19-50, package 3-5)
+            let maternityPremium = 0;
+            if (personData.maternity && personData.gender === 'female' && age >= 19 && age <= 50 && packageNum >= 3) {
+                maternityPremium = 2000000;
+            }
+            
+            const total = mainPremium + criticalIllnessPremium + maternityPremium;
+            
+            return {
+                age,
+                isIndependent,
+                mainPremium,
+                criticalIllnessPremium,
+                maternityPremium,
+                total,
+                packageName: `Lựa chọn ${packageNum}`
+            };
+        }
+
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount);
+        }
+
+        document.getElementById('insuranceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const cards = document.querySelectorAll('.person-card');
+            const results = [];
+            let totalPremium = 0;
+            const totalPeople = cards.length;
+            
+            cards.forEach((card, index) => {
+                const personId = card.dataset.personId;
+                const dob = card.querySelector(`input[name="dob-${personId}"]`).value;
+                const gender = card.querySelector(`input[name="gender-${personId}"]`).value;
+                const packageNum = card.querySelector(`select[name="package-${personId}"]`).value;
+                const criticalIllness = card.querySelector(`input[name="criticalIllness-${personId}"]`).checked;
+                const maternity = card.querySelector(`input[name="maternity-${personId}"]`).checked;
+                
+                const personData = {
+                    dob,
+                    gender,
+                    package: packageNum,
+                    criticalIllness,
+                    maternity
+                };
+                
+                const result = calculatePersonPremium(personData, totalPeople);
+                result.personNumber = index + 1;
+                results.push(result);
+                totalPremium += result.total;
+            });
+            
+            displayResults(results, totalPremium);
+        });
+
+        function displayResults(results, totalPremium) {
+            const totalAmountEl = document.getElementById('totalAmount');
+            const breakdownEl = document.getElementById('breakdownContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            
+            totalAmountEl.textContent = `VND ${formatVND(totalPremium)}`;
+            
+            let breakdownHTML = '';
+            
+            results.forEach(result => {
+                breakdownHTML += `
+                    <div class="result-breakdown">
+                        <div class="breakdown-title">
+                            <span>Người được bảo hiểm ${result.personNumber}</span>
+                            <span style="font-size: 13px; color: #888;">${result.isIndependent ? 'Độc lập' : 'Mua kèm'}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Tuổi</span>
+                            <span class="breakdown-value">${result.age} tuổi</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">${result.packageName}</span>
+                            <span class="breakdown-value"></span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">• Quyền lợi chính + ngoại trú</span>
+                            <span class="breakdown-value">VND ${formatVND(result.mainPremium)}</span>
+                        </div>
+                        ${result.criticalIllnessPremium > 0 ? `
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">• Bệnh hiểm nghèo</span>
+                            <span class="breakdown-value">VND ${formatVND(result.criticalIllnessPremium)}</span>
+                        </div>
+                        ` : ''}
+                        ${result.maternityPremium > 0 ? `
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">• Chăm sóc Thai sản</span>
+                            <span class="breakdown-value">VND ${formatVND(result.maternityPremium)}</span>
+                        </div>
+                        ` : ''}
+                        <div class="breakdown-item" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 15px;">
+                            <span class="breakdown-label"><strong>Tổng phí</strong></span>
+                            <span class="breakdown-value" style="color: #667eea; font-size: 18px;">VND ${formatVND(result.total)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            breakdownHTML += `
+                <div class="info-box">
+                    ℹ️ <strong>Lưu ý:</strong><br>
+                    • Quyền lợi chính + ngoại trú là bắt buộc cho tất cả người tham gia<br>
+                    • <strong>1 người tham gia = Độc lập</strong><br>
+                    • <strong>Từ 2 người trở lên = TẤT CẢ đều được tính Mua kèm</strong><br>
+                    • Thai sản chỉ áp dụng cho nữ 19-50 tuổi với chương trình Lựa chọn 3, 4, 5
+                </div>
+            `;
+            
+            breakdownEl.innerHTML = breakdownHTML;
+            resultContainer.classList.add('show');
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
