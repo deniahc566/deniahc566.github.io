@@ -944,7 +944,7 @@
                 height: 2.75rem;
             }
 
-            /* Tables are scaled down via JS zoom, so no horizontal scroll needed.
+            /* Tables are scaled down via JS transform:scale(), so no horizontal scroll needed.
                !important overrides the base .modal-body { overflow-x: auto } at line ~1220. */
             .modal-body {
                 padding: 0.875rem 1rem;
@@ -961,15 +961,10 @@
            JS (fitBenefitTables) overrides with exact value;
            this CSS acts as a guaranteed fallback.
         ------------------------------------------ */
-        @media (max-width: 600px) {
+        @media (max-width: 568px) {
             .benefit-zoom {
-                zoom: 0.56;          /* 580 * 0.56 = 325px — fits 347px+ phones */
                 transform-origin: top left;
-            }
-        }
-        @media (max-width: 340px) {
-            .benefit-zoom {
-                zoom: 0.46;          /* 580 * 0.46 = 267px — fits 300px+ phones */
+                width: 580px;   /* natural width; JS applies scale() + height */
             }
         }
 
@@ -1814,10 +1809,28 @@
             const body = document.querySelector('#benefitModal .modal-body');
             const wrap = document.querySelector('#benefitModal .benefit-zoom');
             if (!body || !wrap) return;
-            const available = body.clientWidth;
+            const style = getComputedStyle(body);
+            const available = body.clientWidth
+                - parseFloat(style.paddingLeft)
+                - parseFloat(style.paddingRight);
             if (!available) { setTimeout(fitBenefitTables, 50); return; }
             const TABLE_MIN_WIDTH = 580;
-            wrap.style.zoom = available >= TABLE_MIN_WIDTH ? '' : (available / TABLE_MIN_WIDTH) * 0.97;
+            if (available >= TABLE_MIN_WIDTH) {
+                wrap.style.transform = '';
+                wrap.style.height = '';
+                wrap.style.width = '';
+            } else {
+                const ratio = (available / TABLE_MIN_WIDTH) * 0.97;
+                // Reset to natural layout to measure true height
+                wrap.style.transform = '';
+                wrap.style.height = 'auto';
+                wrap.style.width = TABLE_MIN_WIDTH + 'px';
+                const naturalHeight = wrap.scrollHeight;
+                // Scale down visually; collapse layout height so parent scroll is correct
+                wrap.style.transformOrigin = 'top left';
+                wrap.style.transform = 'scale(' + ratio + ')';
+                wrap.style.height = Math.round(naturalHeight * ratio) + 'px';
+            }
         }
 
         function openBenefitModal() {
@@ -1836,6 +1849,11 @@
         }
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeBenefitModal();
+        });
+        window.addEventListener('resize', function() {
+            if (document.getElementById('benefitModal').classList.contains('open')) {
+                fitBenefitTables();
+            }
         });
     </script>
 
