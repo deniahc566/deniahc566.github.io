@@ -1799,12 +1799,6 @@
                 age--;
             }
 
-            // Round up: if not exactly on birthday, add 1
-            const isExactBirthday = (monthDiff % 12 === 0) && dayDiff === 0;
-            if (!isExactBirthday) {
-                age++;
-            }
-
             return age;
         }
 
