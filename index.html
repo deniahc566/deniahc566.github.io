@@ -408,6 +408,10 @@
             transform: scale(1.02);
         }
 
+        .gender-select.error .gender-option {
+            border-color: #e53e3e;
+        }
+
         /* Checkbox Group */
         .checkbox-group {
             display: flex;
@@ -1690,6 +1694,7 @@
             options.forEach(opt => opt.classList.remove('selected'));
             clickedEl.classList.add('selected'); // passed via addEventListener, no global event object
             input.value = gender;
+            card.querySelector('.gender-select').classList.remove('error');
 
             updateMaternityAvailability(personId);
         }
@@ -1866,6 +1871,18 @@
             let totalPremium = 0;
             const totalPeople = cards.length;
             
+            // Validate gender (hidden input — browser won't catch it)
+            let hasGenderError = false;
+            cards.forEach(card => {
+                const personId = card.dataset.personId;
+                const gender = card.querySelector(`input[name="gender-${personId}"]`).value;
+                if (!gender) {
+                    card.querySelector('.gender-select').classList.add('error');
+                    hasGenderError = true;
+                }
+            });
+            if (hasGenderError) return;
+
             cards.forEach((card, index) => {
                 const personId = card.dataset.personId;
                 const dob = card.querySelector(`input[name="dob-${personId}"]`).value;
