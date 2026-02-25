@@ -137,7 +137,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.625rem 1.5rem;
+            padding: 0,625rem 1.5rem;
             border-radius: 9999px;
             background: var(--background);
             border: 1.5px solid rgba(255,107,53,0.2);
@@ -151,7 +151,7 @@
 
         .smart-badge-text {
             font-family: var(--font-display);
-            font-size: 0.875rem;
+            font-size: 0,875rem;
             font-weight: 600;
             background: var(--text-primary);
             -webkit-background-clip: text;
@@ -200,7 +200,7 @@
         }
 
         .hero-description {
-            font-size: 1.125rem;
+            font-size: 1,125rem;
             color: var(--text-secondary);
             max-width: 600px;
             margin-bottom: 3rem;
@@ -293,7 +293,7 @@
 
         .person-badge {
             display: inline-block;
-            padding: 0.375rem 0.875rem;
+            padding: 0,375rem 0,875rem;
             border-radius: var(--radius-sm);
             font-size: 0.75rem;
             font-weight: 600;
@@ -316,7 +316,7 @@
             border: 1.5px solid #FCA5A5;
             padding: 0.5rem 1rem;
             border-radius: var(--radius-sm);
-            font-size: 0.875rem;
+            font-size: 0,875rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -345,10 +345,10 @@
         }
 
         .form-label {
-            margin-bottom: 0.625rem;
+            margin-bottom: 0,625rem;
             color: var(--text-primary);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0,875rem;
             font-family: var(--font-display);
         }
 
@@ -358,7 +358,7 @@
 
         input.date-input,
         select {
-            padding: 0.875rem 1rem;
+            padding: 0,875rem 1rem;
             border: 2px solid var(--border);
             border-radius: var(--radius-sm);
             font-size: 1rem;
@@ -383,7 +383,7 @@
         }
 
         .gender-option {
-            padding: 0.875rem;
+            padding: 0,875rem;
             border: 2px solid var(--border);
             border-radius: var(--radius-sm);
             text-align: center;
@@ -422,7 +422,7 @@
         .checkbox-item {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1rem;
+            padding: 0,875rem 1rem;
             background: var(--background);
             border: 2px solid var(--border);
             border-radius: var(--radius-sm);
@@ -488,6 +488,39 @@
             transform: translateY(-1px);
         }
 
+        .btn-primary:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.65;
+        }
+
+        .agree-check-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(0,82,212,0.04);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+        .agree-check-label:hover { border-color: var(--shb-orange-light); }
+        .agree-check-label input[type="checkbox"] {
+            flex-shrink: 0;
+            width: 1.1rem;
+            height: 1.1rem;
+            margin-top: 0.1rem;
+            accent-color: var(--shb-orange-light);
+            cursor: pointer;
+        }
+
         .btn-secondary {
             background: transparent;
             color: var(--shb-blue);
@@ -548,7 +581,7 @@
 
         .result-total-label {
             font-family: var(--font-display);
-            font-size: 0.875rem;
+            font-size: 0,875rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--text-secondary);
@@ -623,10 +656,10 @@
         .breakdown-title {
             font-family: var(--font-display);
             font-weight: 700;
-            font-size: 1.125rem;
+            font-size: 1,125rem;
             color: var(--text-primary);
             margin-bottom: 1rem;
-            padding-bottom: 0.875rem;
+            padding-bottom: 0,875rem;
             border-bottom: 2px solid var(--surface);
             display: flex;
             justify-content: space-between;
@@ -636,7 +669,7 @@
         .breakdown-type-badge {
             font-size: 0.75rem;
             font-weight: 600;
-            padding: 0.375rem 0.875rem;
+            padding: 0,375rem 0,875rem;
             border-radius: var(--radius-sm);
         }
 
@@ -653,9 +686,9 @@
         .breakdown-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.875rem 0;
+            padding: 0,875rem 0;
             color: var(--text-secondary);
-            font-size: 0.9375rem;
+            font-size: 0,9375rem;
         }
 
         .breakdown-item:not(:last-child) {
@@ -682,7 +715,7 @@
         }
 
         .breakdown-total .breakdown-value {
-            font-size: 1.375rem;
+            font-size: 1,375rem;
             background: var(--shb-orange-light);
             -webkit-background-clip: text;
             background-clip: text;
@@ -695,7 +728,7 @@
             padding: 1.25rem 1.5rem;
             border-radius: var(--radius-sm);
             margin-top: 1.5rem;
-            font-size: 0.875rem;
+            font-size: 0,875rem;
             color: var(--text-primary);
             line-height: 1.7;
         }
@@ -825,7 +858,7 @@
 
             .person-header {
                 flex-wrap: wrap;
-                gap: 0.625rem;
+                gap: 0,625rem;
                 margin-bottom: 1rem;
             }
 
@@ -870,7 +903,7 @@
 
             .btn {
                 min-height: 44px;
-                padding: 0.875rem 1.5rem;
+                padding: 0,875rem 1.5rem;
             }
 
             /* RESULTS */
@@ -899,12 +932,12 @@
                 flex-wrap: wrap;
                 gap: 0.5rem;
                 font-size: 1rem;
-                margin-bottom: 0.875rem;
+                margin-bottom: 0,875rem;
                 padding-bottom: 0.75rem;
             }
 
             .breakdown-item {
-                font-size: 0.875rem;
+                font-size: 0,875rem;
                 padding: 0.75rem 0;
             }
 
@@ -919,8 +952,8 @@
             }
 
             .info-box {
-                padding: 1rem 1.125rem;
-                font-size: 0.875rem;
+                padding: 1rem 1,125rem;
+                font-size: 0,875rem;
             }
 
             /* MODAL — BOTTOM SHEET */
@@ -961,7 +994,7 @@
             /* Tables are scaled down via JS transform:scale(), so no horizontal scroll needed.
                !important overrides the base .modal-body { overflow-x: auto } at line ~1220. */
             .modal-body {
-                padding: 0.875rem 1rem;
+                padding: 0,875rem 1rem;
                 overflow-y: auto;
                 overflow-x: hidden !important;
                 flex: 1 1 auto;
@@ -1036,7 +1069,7 @@
                 padding: 2.5rem 3rem;
             }
             .benefit-table {
-                font-size: 0.875rem;
+                font-size: 0,875rem;
             }
             .benefit-table thead th {
                 padding: 0.75rem 1rem;
@@ -1056,14 +1089,14 @@
                 padding: 3rem 3.5rem;
             }
             .benefit-table {
-                font-size: 0.9375rem;
+                font-size: 0,9375rem;
             }
             .benefit-table thead th {
-                padding: 0.875rem 1.125rem;
+                padding: 0,875rem 1,125rem;
                 font-size: 0.85rem;
             }
             .benefit-table tbody td {
-                padding: 0.8rem 1.125rem;
+                padding: 0.8rem 1,125rem;
             }
         }
 
@@ -1083,9 +1116,9 @@
             }
 
             .smart-badge {
-                padding: 0.375rem 0.875rem;
+                padding: 0,375rem 0,875rem;
                 gap: 0.5rem;
-                margin-bottom: 0.875rem;
+                margin-bottom: 0,875rem;
             }
 
             .smart-badge-text {
@@ -1093,13 +1126,13 @@
             }
 
             .hero-headline {
-                font-size: clamp(1.625rem, 8vw, 2rem);
-                margin-bottom: 0.875rem;
+                font-size: clamp(1,625rem, 8vw, 2rem);
+                margin-bottom: 0,875rem;
             }
 
             .logo-bar {
                 gap: 1rem;
-                padding: 0.875rem 0 1.25rem;
+                padding: 0,875rem 0 1.25rem;
             }
 
             .logo-bar img {
@@ -1116,7 +1149,7 @@
             }
 
             .calculator-title {
-                font-size: 1.125rem;
+                font-size: 1,125rem;
                 margin-bottom: 1.25rem;
                 gap: 0.5rem;
             }
@@ -1132,23 +1165,23 @@
             }
 
             .person-header {
-                margin-bottom: 0.875rem;
+                margin-bottom: 0,875rem;
             }
 
             .person-badge {
-                font-size: 0.6875rem;
-                padding: 0.25rem 0.625rem;
+                font-size: 0,6875rem;
+                padding: 0.25rem 0,625rem;
             }
 
             .form-row {
-                gap: 0.875rem;
+                gap: 0,875rem;
                 margin-bottom: 1rem;
             }
 
             /* Tighten vertical padding but NEVER drop font-size below 1rem */
             input.date-input,
             select {
-                padding: 0.75rem 0.875rem;
+                padding: 0.75rem 0,875rem;
                 font-size: 1rem;
             }
 
@@ -1158,11 +1191,11 @@
             }
 
             .checkbox-item {
-                padding: 0.75rem 0.875rem;
+                padding: 0.75rem 0,875rem;
             }
 
             .btn {
-                padding: 0.875rem 1.25rem;
+                padding: 0,875rem 1.25rem;
                 font-size: 1rem;
             }
 
@@ -1177,42 +1210,42 @@
 
             .result-breakdown {
                 padding: 1rem;
-                margin-bottom: 0.875rem;
+                margin-bottom: 0,875rem;
             }
 
             .breakdown-title {
-                font-size: 0.9375rem;
+                font-size: 0,9375rem;
             }
 
             .breakdown-item {
-                font-size: 0.8125rem;
-                padding: 0.625rem 0;
+                font-size: 0,8125rem;
+                padding: 0,625rem 0;
             }
 
             .breakdown-total {
                 margin: 0 -1rem -1rem;
-                padding: 0.875rem 1rem;
+                padding: 0,875rem 1rem;
             }
 
             .breakdown-total .breakdown-value {
-                font-size: 1.125rem;
+                font-size: 1,125rem;
             }
 
             .info-box {
-                padding: 0.875rem 1rem;
-                font-size: 0.8125rem;
+                padding: 0,875rem 1rem;
+                font-size: 0,8125rem;
             }
 
             .modal-header {
-                padding: 0.875rem 1rem;
+                padding: 0,875rem 1rem;
             }
 
             .modal-header-title {
-                font-size: 0.9375rem;
+                font-size: 0,9375rem;
             }
 
             .modal-body {
-                padding: 0.75rem 0.875rem;
+                padding: 0.75rem 0,875rem;
             }
 
 
@@ -1261,7 +1294,7 @@
             margin-bottom: 1rem;
             cursor: pointer;
             font-family: var(--font-display);
-            font-size: 0.9375rem;
+            font-size: 0,9375rem;
             font-weight: 600;
             color: var(--shb-blue);
             text-decoration: underline;
@@ -1430,11 +1463,7 @@
                     <div>Sản phẩm chi trả đầy đủ chi phí khám chữa bệnh thực tế cho <span style="color: var(--shb-orange-light)">quyền lợi nội trú, ngoại trú và thai sản.</span></div>
                     <div>Đồng thời bảo vệ trước <span style="color: var(--shb-orange-light)">rủi ro sinh mạng, tai nạn và bệnh hiểm nghèo</span> với cơ chế kết hợp thanh toán chi phí điều trị và trợ cấp theo quyền lợi, giúp khách hàng an tâm chăm sóc sức khỏe mà không lo gánh nặng tài chính.</div>
                 </p>
-                <button class="benefit-link" onclick="openBenefitModal()">
-                    <span class="benefit-link-icon">📋</span>
-                    Xem chi tiết quyền lợi bảo hiểm
-                    <span class="benefit-link-arrow">→</span>
-                </button>
+
 
                 <!-- Calculator Card -->
                 <div class="calculator-wrapper">
@@ -1447,12 +1476,32 @@
                             <form id="insuranceForm">
                                 <div id="personsContainer"></div>
 
+                                <button type="button" class="benefit-link" onclick="openBenefitModal()" style="margin-top: 1rem;">
+                                    <span class="benefit-link-icon">📋</span>
+                                    Xem chi tiết quyền lợi bảo hiểm
+                                    <span class="benefit-link-arrow">→</span>
+                                </button>
+
+                                <div class="modal-note">
+                                    <strong>Lưu ý:</strong><br>
+                                    • Mua trẻ em từ 1 đến 7 tuổi tham gia <strong>Độc lập (1 người)</strong> áp dụng tăng 30% phí bảo hiểm.<br>
+                                    • Bệnh hiểm nghèo có <strong>thời gian chờ 90 ngày</strong> kể từ ngày hiệu lực hợp đồng.<br>
+                                    • Quyền lợi Chăm sóc Thai sản chỉ áp dụng cho <strong>nữ giới từ 19-50 tuổi</strong>, tham gia <strong>Gói 3, 4 hoặc 5</strong>.<br>
+                                    • Ung thư tuyến giáp giai đoạn trễ: VBI chi trả <strong>50% số tiền bảo hiểm</strong> của quyền lợi bệnh hiểm nghèo.<br>
+                                    <span style="color: #EF4444; font-weight:bold;">• Đường link này chỉ phục vụ cho mục đích tính phí bảo hiểm và tham khảo mức phí dự kiến; các thông tin chi tiết về quyền lợi, điều khoản và nội dung sản phẩm vui lòng căn cứ theo tài liệu bán hàng chính thức để được tư vấn và cung cấp đầy đủ, chính xác nhất.</span>
+                                </div>
+
+                                <label class="agree-check-label">
+                                    <input type="checkbox" id="agreeCheck" onchange="document.getElementById('submitBtn').disabled = !this.checked">
+                                    <span>Tôi đã đọc và hiểu toàn bộ chi tiết quyền lợi bảo hiểm và các lưu ý của chương trình</span>
+                                </label>
+
                                 <button type="button" class="btn btn-secondary btn-full" onclick="addPerson()">
                                     + Thêm người được bảo hiểm
                                 </button>
 
                                 <div style="margin-top: 1rem;">
-                                    <button type="submit" class="btn btn-primary btn-full">
+                                    <button type="submit" id="submitBtn" class="btn btn-primary btn-full" disabled>
                                         Tính phí bảo hiểm →
                                     </button>
                                 </div>
@@ -1478,14 +1527,7 @@
                     </div>
                 </div>
 
-                <div class="modal-note">
-                    <strong>Lưu ý:</strong><br>
-                    • Mua trẻ em từ 1 đên 6 tuổi tham gia <strong>Độc lập (1 người)</strong> áp dụng tăng 30% phí bảo hiểm.<br>
-                    • Bệnh hiểm nghèo có <strong>thời gian chờ 90 ngày</strong> kể từ ngày hiệu lực hợp đồng.<br>
-                    • Quyền lợi Chăm sóc Thai sản chỉ áp dụng cho <strong>nữ giới từ 19-50 tuổi</strong>, tham gia <strong>Gói 3, 4 hoặc 5</strong>.<br>
-                    • Ung thư tuyến giáp giai đoạn trễ: VBI chi trả <strong>50% số tiền bảo hiểm</strong> của quyền lợi bệnh hiểm nghèo.<br>
-                    <span style="color: #EF4444; font-weight:bold;">• Đường link này chỉ phục vụ cho mục đích tính phí bảo hiểm và tham khảo mức phí dự kiến; các thông tin chi tiết về quyền lợi, điều khoản và nội dung sản phẩm vui lòng căn cứ theo tài liệu bán hàng chính thức để được tư vấn và cung cấp đầy đủ, chính xác nhất.</span>
-                </div>
+
             </div>
         </div>
     </section>
@@ -1856,7 +1898,7 @@
         }
 
         function formatVND(amount) {
-            return new Intl.NumberFormat('vi-VN').format(amount);
+            return new Intl.NumberFormat('en-US').format(amount);
         }
 
         function roundToThousand(amount) {
@@ -2091,12 +2133,12 @@
                     <tbody>
                         <tr class="group-row"><td>A1 — Tử vong & Tổn thương vĩnh viễn do tai nạn</td><td>40,000,000</td><td>60,000,000</td><td>100,000,000</td><td>200,000,000</td><td>240,000,000</td></tr>
                         <tr class="bold-row"><td>I - Tử vong, Tổn thương toàn bộ vĩnh viễn do tai nạn</td><td>40,000,000</td><td>60,000,000</td><td>100,000,000</td><td>200,000,000</td><td>240,000,000</td></tr>
-                        <tr class="sub-row"><td>1. Tử vong/Tổn thương toàn bộ vĩnh viễn do tai nạn thông thường</td><td>20.000.000</td><td>30.000.000</td><td>50.000.000</td><td>100.000.000</td><td>120.000.000</td></tr>
-                        <tr class="sub-row"><td>2. Tử vong/Tổn thương toàn bộ vĩnh viễn do tai nạn trên phương tiện công cộng</td><td>40.000.000</td><td>60.000.000</td><td>100.000.000</td><td>200.000.000</td><td>240.000.000</td></tr>
-                        <tr class="bold-row"><td>II - Tổn thương bộ phận vĩnh viễn do tai nạn/năm (chi trả theo % tỷ lệ tổn thương)</td><td>20.000.000</td><td>30.000.000</td><td>50.000.000</td><td>100.000.000</td><td>120.000.000</td></tr>
-                        <tr class="group-row"><td>A2 - Chi phí y tế do tai nạn / năm</td><td>4.000.000</td><td>6.000.000</td><td>10.000.000</td><td>20.000.000</td><td>24.000.000</td></tr>
+                        <tr class="sub-row"><td>1. Tử vong/Tổn thương toàn bộ vĩnh viễn do tai nạn thông thường</td><td>20,000,000</td><td>30,000,000</td><td>50,000,000</td><td>100,000,000</td><td>120,000,000</td></tr>
+                        <tr class="sub-row"><td>2. Tử vong/Tổn thương toàn bộ vĩnh viễn do tai nạn trên phương tiện công cộng</td><td>40,000,000</td><td>60,000,000</td><td>100,000,000</td><td>200,000,000</td><td>240,000,000</td></tr>
+                        <tr class="bold-row"><td>II - Tổn thương bộ phận vĩnh viễn do tai nạn/năm (chi trả theo % tỷ lệ tổn thương)</td><td>20,000,000</td><td>30,000,000</td><td>50,000,000</td><td>100,000,000</td><td>120,000,000</td></tr>
+                        <tr class="group-row"><td>A2 - Chi phí y tế do tai nạn / năm</td><td>4,000,000</td><td>6,000,000</td><td>10,000,000</td><td>20,000,000</td><td>24,000,000</td></tr>
                         <tr class="group-row"><td>A3 — Tử vong & Tổn thương vĩnh viễn do ốm bệnh, thai sản</td><td>20,000,000</td><td>30,000,000</td><td>50,000,000</td><td>100,000,000</td><td>120,000,000</td></tr>
-                        <tr class="group-row"><td>A4 — Điều trị nội trú, phẫu thuật do bệnh</td><td>20.000.000</td><td>30.000.000</td><td>50.000.000</td><td>100.000.000</td><td>120.000.000</td></tr>
+                        <tr class="group-row"><td>A4 — Điều trị nội trú, phẫu thuật do bệnh</td><td>20,000,000</td><td>30,000,000</td><td>50,000,000</td><td>100,000,000</td><td>120,000,000</td></tr>
                         <tr class="sub-row"><td>
                             <div><strong>1. Chi phí nằm viện / ngày (tối đa 60 ngày/năm):</strong><div>
                             <div> - Tiền giường, tiền ăn theo tiêu chuẩn tại bệnh viện</div>
@@ -2106,62 +2148,48 @@
                             <div> - Chi phí xét nghiệm hoặc chẩn đoán</div>
                             <div> - Các chi phí y tế khác trong thời gian nằm viện theo quy định tại quy tắc bảo hiểm</div>
                             <div> - (Bao gồm cả điều trị trong ngày và điều trị cấp cứu có phát sinh chi phí giường được áp dụng như điều trị trong ngày)</div>
-                            </td><td>500.000</td><td>750.000</td><td>1.250.000</td><td>2.500.000</td><td>3.000.000</td></tr>
+                            </td><td>500,000</td><td>750,000</td><td>1,250,000</td><td>2,500,000</td><td>3,000,000</td></tr>
                         <tr class="sub-row"><td>
                             <div><strong>2. Chi phí phẫu thuật / năm (theo thực tế):</strong><div>
                             <div> - Phẫu thuật nội trú, Phẫu thuật trong ngày do bệnh<div>
                             <div> - Phẫu thuật liên quan đến cấy ghép nội tạng (không bao gồm chi phí mua bộ phận)<div></div>
                             <div> Chi trả theo thực tế tối đa không quá giới hạn quy định trong từng gói bảo hiểm.<div></div>
-                        </td><td>20.000.000</td><td>30.000.000</td><td>50.000.000</td><td>100.000.000</td><td>120.000.000</td></tr>
+                        </td><td>20,000,000</td><td>30,000,000</td><td>50,000,000</td><td>100,000,000</td><td>120,000,000</td></tr>
                         <tr class="bold-row"><td colspan="6">3. Quyền lợi khác</td></tr>
-                        <tr class="sub-row"><td>3.1. Chi phí điều trị trước nhập viện/năm (trong vòng 30 ngày trước nhập viện)</td><td>500.000</td><td>750.000</td><td>1.250.000</td><td>2.500.000</td><td>3.000.000</td></tr>
-                        <tr class="sub-row"><td>3.2. Chi phí điều trị sau xuất viện/năm (trong vòng 30 ngày từ ngày xuất viện)</td><td>500.000</td><td>750.000</td><td>1.250.000</td><td>2.500.000</td><td>3.000.000</td></tr>
-                        <tr class="sub-row"><td>3.3. Chi phí y tá chăm sóc tại nhà sau xuất viện/năm (tối đa 15 ngày)</td><td>200.000</td><td>500.000</td><td>800.000</td><td>1.500.000</td><td>2.000.000</td></tr>
-                        <tr class="sub-row"><td>3.4. Trợ cấp nằm viện tại CSYT công lập/ngày (tối đa 60 ngày)</td><td class="na">Không áp dụng</td><td class="na">Không áp dụng</td><td>50.000</td><td>80.000</td><td>120.000</td></tr>
-                        <tr class="sub-row"><td>3.5. Dịch vụ xe cứu thương (trong VN, trừ đường hàng không)</td><td>10.000.000</td><td>15.000.000</td><td>25.000.000</td><td>50.000.000</td><td>60.000.000</td></tr>
-                        <tr class="sub-row"><td>3.6. Trợ cấp mai táng phí (tử vong tại bệnh viện)</td><td>500.000</td><td>1.000.000</td><td>1.000.000</td><td>2.000.000</td><td>3.000.000</td></tr>
+                        <tr class="sub-row"><td>3.1. Chi phí điều trị trước nhập viện/năm (trong vòng 30 ngày trước nhập viện)</td><td>500,000</td><td>750,000</td><td>1,250,000</td><td>2,500,000</td><td>3,000,000</td></tr>
+                        <tr class="sub-row"><td>3.2. Chi phí điều trị sau xuất viện/năm (trong vòng 30 ngày từ ngày xuất viện)</td><td>500,000</td><td>750,000</td><td>1,250,000</td><td>2,500,000</td><td>3,000,000</td></tr>
+                        <tr class="sub-row"><td>3.3. Chi phí y tá chăm sóc tại nhà sau xuất viện/năm (tối đa 15 ngày)</td><td>200,000</td><td>500,000</td><td>800,000</td><td>1,500,000</td><td>2,000,000</td></tr>
+                        <tr class="sub-row"><td>3.4. Trợ cấp nằm viện tại CSYT công lập/ngày (tối đa 60 ngày)</td><td class="na">Không áp dụng</td><td class="na">Không áp dụng</td><td>50,000</td><td>80,000</td><td>120,000</td></tr>
+                        <tr class="sub-row"><td>3.5. Dịch vụ xe cứu thương (trong VN, trừ đường hàng không)</td><td>10,000,000</td><td>15,000,000</td><td>25,000,000</td><td>50,000,000</td><td>60,000,000</td></tr>
+                        <tr class="sub-row"><td>3.6. Trợ cấp mai táng phí (tử vong tại bệnh viện)</td><td>500,000</td><td>1,000,000</td><td>1,000,000</td><td>2,000,000</td><td>3,000,000</td></tr>
                         <tr><td>Dịch vụ bảo lãnh viện phí</td><td>Nội trú</td><td>Nội trú</td><td>Nội trú</td><td>Nội trú</td><td>Nội trú + Ngoại trú</td></tr>
-                        <tr class="group-row"><td>A5 — Điều trị ngoại trú do bệnh / năm</td><td>Không áp dụng</td><td>Không áp dụng</td><td>3.000.000</td><td>5.000.000</td><td>8.000.000</td></tr>
+                        <tr class="group-row"><td>A5 — Điều trị ngoại trú do bệnh / năm</td><td>Không áp dụng</td><td>Không áp dụng</td><td>3,000,000</td><td>5,000,000</td><td>8,000,000</td></tr>
                         <tr class="bold-row"><td>1. Chi phí điều trị ngoại trú</td>
                             <td class="na">Không áp dụng</td>
                             <td class="na">Không áp dụng</td>
-                            <td>3.000.000</td>
-                            <td>5.000.000</td>
-                            <td>8.000.000</td>
+                            <td>3,000,000</td>
+                            <td>5,000,000</td>
+                            <td>8,000,000</td>
                         </tr>
                         <tr class="sub-row">
                             <td>Chi phí khám bệnh tiền thuốc theo kê đơn của bác sĩ tiền chụp Xquang và làm các xét nghiệm theo chỉ định của bác sĩ.</td>
-                            <td class="na">Không áp dụng</td>
-                            <td class="na">Không áp dụng</td>
-                            <td>
-                                <div>300.000/lần.</div>
+                            <td class="na" rowspan="2">Không áp dụng</td>
+                            <td class="na" rowspan="2">Không áp dụng</td>
+                            <td rowspan="2">
+                                <div>300,000/lần.</div>
                                 <div>Tối đa 10 lần/ năm</div>
                             </td>
-                            <td>
-                                <div>500.000/lần.</div>
+                            <td rowspan="2">
+                                <div>500,000/lần.</div>
                                 <div>Tối đa 10 lần/ năm</div>
                             </td>
-                            <td>
-                                <div>800.000/lần.</div>
+                            <td rowspan="2">
+                                <div>800,000/lần.</div>
                                 <div>Tối đa 10 lần/ năm</div>
                             </td>
                         </tr>
                         <tr class="sub-row">
                             <td>Vật lý trị liệu và các phương pháp điều trị tương tự</td>
-                            <td class="na">Không áp dụng</td>
-                            <td class="na">Không áp dụng</td>
-                            <td>
-                                <div>300.000/lần.</div>
-                                <div>Tối đa 10 lần/ năm</div>
-                            </td>
-                            <td>
-                                <div>500.000/lần.</div>
-                                <div>Tối đa 10 lần/ năm</div>
-                            </td>
-                            <td>
-                                <div>800.000/lần.</div>
-                                <div>Tối đa 10 lần/ năm</div>
-                            </td>
                         </tr>                        
                     </tbody>
                 </table>
@@ -2182,11 +2210,11 @@
                     <tbody>
                         <tr class="group-row">
                             <td>B1 — Bảo hiểm Bệnh hiểm nghèo (bao gồm Ung thư giai đoạn trễ và 9 bệnh hiểm nghèo khác)</td>
-                            <td>20.000.000</td>
-                            <td>20.000.000</td>
-                            <td>50.000.000</td>
-                            <td>50.000.000</td>
-                            <td>100.000.000</td>
+                            <td>20,000,000</td>
+                            <td>20,000,000</td>
+                            <td>50,000,000</td>
+                            <td>50,000,000</td>
+                            <td>100,000,000</td>
                         </tr>
                         <tr class="sub-row">
                             <td>
@@ -2206,14 +2234,14 @@
                                 <div> - Bệnh gan giai đoạn cuối</div>
                                 <div> - Bệnh phổi giai đoạn cuối</div>
                             </td>
-                            <td>20.000.000</td>
-                            <td>20.000.000</td>
-                            <td>50.000.000</td>
-                            <td>50.000.000</td>
-                            <td>100.000.000</td>
+                            <td>20,000,000</td>
+                            <td>20,000,000</td>
+                            <td>50,000,000</td>
+                            <td>50,000,000</td>
+                            <td>100,000,000</td>
                         </tr>
                         <tr class="group-row"><td colspan="6">B2 — Chăm sóc Thai sản (Nữ 19-50 tuổi, Gói 3-5)</td></tr>
-                        <tr class="sub-row"><td>Quyền lợi thai sản</td><td class="na">Không áp dụng</td><td class="na">Không áp dụng</td><td>10.000.000</td><td>10.000.000</td><td>10.000.000</td></tr>
+                        <tr class="sub-row"><td>Quyền lợi thai sản</td><td class="na">Không áp dụng</td><td class="na">Không áp dụng</td><td>10,000,000</td><td>10,000,000</td><td>10,000,000</td></tr>
                     </tbody>
                 </table>
 
