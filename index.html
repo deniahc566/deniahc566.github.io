@@ -1627,6 +1627,26 @@
             genderHidden.required = true;
             genderGroup.append(genderLabel, genderSelect, genderHidden);
 
+            // Relationship
+            const relGroup = document.createElement('div');
+            relGroup.className = 'form-group';
+            const relLabel = document.createElement('label');
+            relLabel.className = 'form-label';
+            relLabel.innerHTML = 'Mối quan hệ với người mua <span class="required">*</span>';
+            const relSelect = document.createElement('select');
+            relSelect.name = `relationship-${id}`;
+            relSelect.required = true;
+            [['', 'Chọn mối quan hệ'], ['self', 'Bản thân'], ['parent', 'Bố/mẹ'],
+             ['spouse', 'Vợ/chồng'], ['child', 'Con'], ['sibling', 'Anh/chị/em ruột']].forEach(([val, text]) => {
+                const opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = text;
+                relSelect.appendChild(opt);
+            });
+            relSelect.addEventListener('focus', () => focusCard(id));
+            relSelect.addEventListener('blur',  () => blurCard(id));
+            relGroup.append(relLabel, relSelect);
+
             // Package
             const pkgGroup = document.createElement('div');
             pkgGroup.className = 'form-group';
@@ -1648,7 +1668,7 @@
             pkgSelect.addEventListener('blur',   () => blurCard(id));
             pkgGroup.append(pkgLabel, pkgSelect);
 
-            formRow.append(dobGroup, genderGroup, pkgGroup);
+            formRow.append(dobGroup, genderGroup, relGroup, pkgGroup);
             card.appendChild(formRow);
 
             // --- Benefits ---
