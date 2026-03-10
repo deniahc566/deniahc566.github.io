@@ -1601,7 +1601,7 @@
             dobInput.placeholder = 'dd/mm/yyyy';
             dobInput.maxLength = 10;
             dobInput.addEventListener('input',  () => maskDateInput(dobInput));
-            dobInput.addEventListener('change', () => updatePersonInfo(id));
+            dobInput.addEventListener('change', () => { updatePersonInfo(id); updatePackageConstraints(); });
             dobInput.addEventListener('focus',  () => focusCard(id));
             dobInput.addEventListener('blur',   () => validateDateInput(dobInput, id));
             dobGroup.append(dobLabel, dobInput);
@@ -1645,6 +1645,7 @@
             });
             relSelect.addEventListener('focus', () => focusCard(id));
             relSelect.addEventListener('blur',  () => blurCard(id));
+            relSelect.addEventListener('change', () => { relSelect.setCustomValidity(''); updatePackageConstraints(); });
             relGroup.append(relLabel, relSelect);
 
             // Package
@@ -1663,7 +1664,7 @@
                 opt.textContent = text;
                 pkgSelect.appendChild(opt);
             });
-            pkgSelect.addEventListener('change', () => updateMaternityAvailability(id));
+            pkgSelect.addEventListener('change', () => { updateMaternityAvailability(id); updatePackageConstraints(); });
             pkgSelect.addEventListener('focus',  () => focusCard(id));
             pkgSelect.addEventListener('blur',   () => blurCard(id));
             pkgGroup.append(pkgLabel, pkgSelect);
@@ -1710,6 +1711,7 @@
 
             container.appendChild(card);
             updateAllPersonBadges();
+            updatePackageConstraints();
         }
 
         function removePerson(id) {
@@ -1717,6 +1719,7 @@
             if (person) {
                 person.remove();
                 updateAllPersonBadges();
+                updatePackageConstraints();
             }
         }
 
@@ -1724,21 +1727,62 @@
 
         function blurCard(personId) {}
 
+        function updatePackageConstraints() {
+            const cards = document.querySelectorAll('.person-card');
+            const totalPeople = cards.length;
+            const groupCtx = computeGroupContext(cards);
+
+            cards.forEach(card => {
+                const pid = card.dataset.personId;
+                const rel = card.querySelector(`select[name="relationship-${pid}"]`).value;
+                const dob = card.querySelector(`input[name="dob-${pid}"]`).value;
+                const pkgSelect = card.querySelector(`select[name="package-${pid}"]`);
+
+                Array.from(pkgSelect.options).forEach(opt => { opt.disabled = false; });
+
+                if (totalPeople > 1 && rel === 'child' && dob) {
+                    const age = calculateAge(dob);
+                    if (age < 7 && groupCtx.hasAnchor && groupCtx.maxAnchorPackage > 0) {
+                        Array.from(pkgSelect.options).forEach(opt => {
+                            const v = parseInt(opt.value, 10);
+                            if (!isNaN(v) && v > groupCtx.maxAnchorPackage) opt.disabled = true;
+                        });
+                        const cur = parseInt(pkgSelect.value, 10);
+                        if (!isNaN(cur) && cur > groupCtx.maxAnchorPackage) {
+                            pkgSelect.value = String(groupCtx.maxAnchorPackage);
+                            updateMaternityAvailability(pid);
+                        }
+                    }
+                }
+            });
+            updateAllPersonBadges();
+        }
+
         function updateAllPersonBadges() {
             const cards = document.querySelectorAll('.person-card');
             const totalPeople = cards.length;
-            
+            const groupCtx = computeGroupContext(cards);
+
             cards.forEach((card, index) => {
                 const badge = card.querySelector('.person-badge');
                 const title = card.querySelector('.person-title');
                 title.textContent = `Người được bảo hiểm ${index + 1}`;
-                
+
                 if (totalPeople === 1) {
                     badge.textContent = 'Độc lập';
                     badge.className = 'person-badge independent';
                 } else {
-                    badge.textContent = 'Mua kèm';
-                    badge.className = 'person-badge bundled';
+                    const pid = card.dataset.personId;
+                    const rel = card.querySelector(`select[name="relationship-${pid}"]`).value;
+                    const dob = card.querySelector(`input[name="dob-${pid}"]`).value;
+                    const forced = shouldForceIndependent(dob, rel, groupCtx, totalPeople);
+                    if (forced) {
+                        badge.textContent = 'Độc lập';
+                        badge.className = 'person-badge independent';
+                    } else {
+                        badge.textContent = 'Mua kèm';
+                        badge.className = 'person-badge bundled';
+                    }
                 }
             });
         }
@@ -1879,7 +1923,7 @@
 
         function calculatePersonPremium(personData, totalPeople) {
             const age = calculateAge(personData.dob);
-            const isIndependent = totalPeople === 1;
+            const isIndependent = totalPeople === 1 || personData.forceIndependent === true;
             const packageNum = parseInt(personData.package);
 
             // Raw values: null means no matching rate row (displayed as "Không áp dụng")
@@ -1920,6 +1964,28 @@
             return Math.round(amount / 1000) * 1000;
         }
 
+        function computeGroupContext(cards) {
+            let hasAnchor = false, maxAnchorPackage = 0;
+            cards.forEach(card => {
+                const pid = card.dataset.personId;
+                const rel = card.querySelector(`select[name="relationship-${pid}"]`).value;
+                const pkg = parseInt(card.querySelector(`select[name="package-${pid}"]`).value, 10);
+                if (rel === 'self' || rel === 'spouse') {
+                    hasAnchor = true;
+                    if (pkg > maxAnchorPackage) maxAnchorPackage = pkg;
+                }
+            });
+            return { hasAnchor, maxAnchorPackage };
+        }
+
+        function shouldForceIndependent(dob, relationship, groupCtx, totalPeople) {
+            if (totalPeople <= 1) return false;
+            const age = calculateAge(dob);
+            if (age >= 7) return false;
+            if (relationship !== 'child') return true;
+            return !groupCtx.hasAnchor;
+        }
+
         document.getElementById('insuranceForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -1927,7 +1993,8 @@
             const results = [];
             let totalPremium = 0;
             const totalPeople = cards.length;
-            
+            const groupCtx = computeGroupContext(cards);
+
             // Validate gender (hidden input — browser won't catch it)
             let hasGenderError = false;
             cards.forEach(card => {
@@ -1940,6 +2007,39 @@
             });
             if (hasGenderError) return;
 
+            // Validate relationship
+            let hasRelationshipError = false;
+            cards.forEach(card => {
+                const pid = card.dataset.personId;
+                const relSelect = card.querySelector(`select[name="relationship-${pid}"]`);
+                if (!relSelect.value) {
+                    relSelect.setCustomValidity('Vui lòng chọn mối quan hệ');
+                    relSelect.reportValidity();
+                    hasRelationshipError = true;
+                } else {
+                    relSelect.setCustomValidity('');
+                }
+            });
+            if (hasRelationshipError) return;
+
+            // Validate package cap for child < 7 with anchor present
+            let hasCapError = false;
+            if (groupCtx.hasAnchor && groupCtx.maxAnchorPackage > 0) {
+                cards.forEach(card => {
+                    const pid = card.dataset.personId;
+                    const rel = card.querySelector(`select[name="relationship-${pid}"]`).value;
+                    const dob = card.querySelector(`input[name="dob-${pid}"]`).value;
+                    const pkg = parseInt(card.querySelector(`select[name="package-${pid}"]`).value, 10);
+                    if (rel === 'child' && calculateAge(dob) < 7 && pkg > groupCtx.maxAnchorPackage) {
+                        const s = card.querySelector(`select[name="package-${pid}"]`);
+                        s.setCustomValidity(`Trẻ dưới 7 tuổi mua kèm chỉ được chọn tối đa Gói ${groupCtx.maxAnchorPackage}`);
+                        s.reportValidity();
+                        hasCapError = true;
+                    }
+                });
+            }
+            if (hasCapError) return;
+
             cards.forEach((card, index) => {
                 const personId = card.dataset.personId;
                 const dob = card.querySelector(`input[name="dob-${personId}"]`).value;
@@ -1947,15 +2047,18 @@
                 const packageNum = card.querySelector(`select[name="package-${personId}"]`).value;
                 const criticalIllness = card.querySelector(`input[name="criticalIllness-${personId}"]`).checked;
                 const maternity = card.querySelector(`input[name="maternity-${personId}"]`).checked;
-                
+                const relationship = card.querySelector(`select[name="relationship-${personId}"]`).value;
+
                 const personData = {
                     dob,
                     gender,
                     package: packageNum,
                     criticalIllness,
-                    maternity
+                    maternity,
+                    relationship,
+                    forceIndependent: shouldForceIndependent(dob, relationship, groupCtx, totalPeople)
                 };
-                
+
                 const result = calculatePersonPremium(personData, totalPeople);
                 result.personNumber = index + 1;
                 results.push(result);
