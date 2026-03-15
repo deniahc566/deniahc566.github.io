@@ -2132,12 +2132,12 @@
                         </div>
                         <div class="breakdown-item">
                             <span class="breakdown-label">• Tử vong<br>+ nội trú<br>+ ngoại trú</span>
-                            <span class="breakdown-value">${result.mainPremiumRaw === null ? 'Không áp dụng' : formatVND(result.mainPremium) + ' VNĐ'}</span>
+                            <span class="breakdown-value">${result.mainPremiumRaw === null ? 'Không áp dụng' : formatVND(roundToThousand(result.mainPremium)) + ' VNĐ'}</span>
                         </div>
                         ${(result.criticalIllnessPremium > 0 || result.criticalIllnessPremiumRaw === null) ? `
                         <div class="breakdown-item">
                             <span class="breakdown-label">• Bệnh hiểm nghèo</span>
-                            <span class="breakdown-value">${result.criticalIllnessPremiumRaw === null ? 'Không áp dụng' : formatVND(result.criticalIllnessPremium) + ' VNĐ'}</span>
+                            <span class="breakdown-value">${result.criticalIllnessPremiumRaw === null ? 'Không áp dụng' : formatVND(roundToThousand(result.criticalIllnessPremium)) + ' VNĐ'}</span>
                         </div>
                         ` : ''}
                         ${result.maternityPremium > 0 ? `

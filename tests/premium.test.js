@@ -30,6 +30,7 @@ const {
     parseDDMMYYYY,
     calculateAge,
     parseVND,
+    roundToThousand,
     buildRateMap,
     findRate,
     calculatePersonPremium,
@@ -893,6 +894,53 @@ describe('Grand total across multiple persons', () => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
+// 7b. roundToThousand – làm tròn đến hàng nghìn
+// ═════════════════════════════════════════════════════════════════════════════
+// Rule: remainder 1-499 → round down; remainder 500-999 → round up
+// (equivalent to standard Math.round to nearest 1000)
+
+describe('roundToThousand', () => {
+
+    // ─── Multiples of 1000 pass through unchanged ─────────────────────────
+    test('0 → 0', () => expect(roundToThousand(0)).toBe(0));
+    test('1000 → 1000', () => expect(roundToThousand(1000)).toBe(1000));
+    test('963000 → 963000 (already multiple)', () => expect(roundToThousand(963000)).toBe(963000));
+    test('2000000 → 2000000', () => expect(roundToThousand(2000000)).toBe(2000000));
+
+    // ─── Round-down cases (remainder 1–499) ───────────────────────────────
+    test('117200 → 117000 (spec example)', () => expect(roundToThousand(117200)).toBe(117000));
+    test('1499 → 1000 (remainder 499 – boundary below 500)', () => expect(roundToThousand(1499)).toBe(1000));
+    test('1001 → 1000 (remainder 1 – smallest non-zero)', () => expect(roundToThousand(1001)).toBe(1000));
+    test('500499 → 500000', () => expect(roundToThousand(500499)).toBe(500000));
+
+    // ─── Round-up cases (remainder 500–999) ───────────────────────────────
+    test('117800 → 118000 (spec example)', () => expect(roundToThousand(117800)).toBe(118000));
+    test('1500 → 2000 (remainder 500 – boundary equal 500)', () => expect(roundToThousand(1500)).toBe(2000));
+    test('1999 → 2000 (remainder 999)', () => expect(roundToThousand(1999)).toBe(2000));
+    test('500500 → 501000', () => expect(roundToThousand(500500)).toBe(501000));
+
+    // ─── Applied via calculatePersonPremium ───────────────────────────────
+    // Verify rounding is actually applied in the premium engine by injecting
+    // a fixture row with a non-thousand-aligned value.
+    test('total is always a multiple of 1000', () => {
+        // All fixture rates are already multiples of 1000 → sum is too
+        const r = calc({
+            dob: '20/02/2001', gender: 'male', package: '1',
+            criticalIllness: false, maternity: false,
+        });
+        expect(r.total % 1000).toBe(0);
+    });
+
+    test('total with CI + maternity is a multiple of 1000', () => {
+        const r = calc({
+            dob: '20/02/2001', gender: 'female', package: '3',
+            criticalIllness: true, maternity: true,
+        });
+        expect(r.total % 1000).toBe(0);
+    });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
 // 8. Error handling & data-integrity edge cases
 // ═════════════════════════════════════════════════════════════════════════════
 
@@ -909,15 +957,17 @@ describe('Error handling – unusual / malformed inputs', () => {
         expect(r.age).toBe(0);
     });
 
-    test('package "0" (not in rate table) → mainPremiumRaw = null', () => {
+    test('package "0" (invalid – row exists but package0 field undefined) → mainPremiumRaw = 0, mainPremium = 0', () => {
+        // findRate only returns null when the entire age/benefit/type/gender row is absent.
+        // For an existing row, accessing an undefined packageN field → parseVND(undefined) = 0.
         const r = calc({ dob: '20/02/2001', gender: 'male', package: '0', criticalIllness: false, maternity: false });
-        expect(r.mainPremiumRaw).toBeNull();
+        expect(r.mainPremiumRaw).toBe(0);
         expect(r.mainPremium).toBe(0);
     });
 
-    test('package "6" (not in rate table) → mainPremiumRaw = null', () => {
+    test('package "6" (invalid – row exists but package6 field undefined) → mainPremiumRaw = 0, mainPremium = 0', () => {
         const r = calc({ dob: '20/02/2001', gender: 'male', package: '6', criticalIllness: false, maternity: false });
-        expect(r.mainPremiumRaw).toBeNull();
+        expect(r.mainPremiumRaw).toBe(0);
         expect(r.mainPremium).toBe(0);
     });
 

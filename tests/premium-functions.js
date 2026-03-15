@@ -74,6 +74,10 @@ function formatVND(amount) {
     return new Intl.NumberFormat('vi-VN').format(amount);
 }
 
+function roundToThousand(amount) {
+    return Math.round(amount / 1000) * 1000;
+}
+
 /**
  * buildRateMap(PREMIUM_RATES)
  * Build the O(1) lookup map from a rates array.
@@ -101,7 +105,7 @@ const MATERNITY_MIN_AGE   = 19;
 const MATERNITY_MAX_AGE   = 50;
 const MATERNITY_MIN_PKG   = 3;
 
-const BENEFIT_MAIN        = 'Quyền lợi chính + ngoại trú';
+const BENEFIT_MAIN        = 'Tử vong, nội trú, ngoại trú';
 const BENEFIT_CRITICAL    = 'Bệnh hiểm nghèo';
 
 /**
@@ -111,7 +115,7 @@ const BENEFIT_CRITICAL    = 'Bệnh hiểm nghèo';
  */
 function calculatePersonPremium(personData, totalPeople, rateMap, today = new Date()) {
     const age          = calculateAge(personData.dob, today);
-    const isIndependent = totalPeople === 1;
+    const isIndependent = totalPeople === 1 || personData.forceIndependent === true;
     const packageNum   = parseInt(personData.package, 10);
 
     const mainPremiumRaw = findRate(rateMap, age, BENEFIT_MAIN, personData.gender, isIndependent, packageNum);
@@ -133,7 +137,7 @@ function calculatePersonPremium(personData, totalPeople, rateMap, today = new Da
         maternityPremium = MATERNITY_PREMIUM;
     }
 
-    const total = mainPremium + criticalIllnessPremium + maternityPremium;
+    const total = roundToThousand(mainPremium + criticalIllnessPremium + maternityPremium);
 
     return {
         age,
@@ -148,14 +152,29 @@ function calculatePersonPremium(personData, totalPeople, rateMap, today = new Da
     };
 }
 
+/**
+ * shouldForceIndependent(dob, relationship, groupCtx, totalPeople, today?)
+ * Pure logic — no DOM dependency.
+ * groupCtx: { hasAnchor: bool, maxAnchorPackage: int }
+ */
+function shouldForceIndependent(dob, relationship, groupCtx, totalPeople, today = new Date()) {
+    if (totalPeople <= 1) return false;
+    const age = calculateAge(dob, today);
+    if (age >= 7) return false;
+    if (relationship !== 'child') return true;
+    return !groupCtx.hasAnchor;
+}
+
 module.exports = {
     parseDDMMYYYY,
     calculateAge,
     parseVND,
     formatVND,
+    roundToThousand,
     buildRateMap,
     findRate,
     calculatePersonPremium,
+    shouldForceIndependent,
     MATERNITY_PREMIUM,
     MATERNITY_MIN_AGE,
     MATERNITY_MAX_AGE,

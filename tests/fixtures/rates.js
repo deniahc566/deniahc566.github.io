@@ -44,7 +44,7 @@ const M   = 'Nam';
 const F   = 'Nữ';
 const IND = 'Độc lập';
 const BUN = 'Mua kèm';
-const MAIN = 'Quyền lợi chính + ngoại trú';
+const MAIN = 'Tử vong, nội trú, ngoại trú';
 const CRIT = 'Bệnh hiểm nghèo';
 
 /**
